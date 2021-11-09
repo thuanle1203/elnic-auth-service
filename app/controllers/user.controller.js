@@ -35,3 +35,32 @@ exports.updateUser = (req, res) => {
       });
     });
 };
+
+exports.getUser = (req, res) => {
+  const MAX_USER = 10;
+
+  const condition = [
+    {
+      $lookup: {
+        from: 'roles',
+        localField: 'roles',
+        foreignField: '_id',
+        as: 'roles'
+      }
+    }
+  ];
+
+  User.aggregate(condition).then((data) => {
+    if (!data) {
+      res.status(404).send({
+        message: `Not have any user here`,
+      });
+    } else
+      res.status(200).send({ data });
+  })
+  .catch((err) => {
+    res.status(500).send({
+      message: "Error get User",
+    });
+  });
+};
