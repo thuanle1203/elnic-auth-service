@@ -4,9 +4,6 @@ const cors = require("cors");
 const dbConfig = require("./app/config/db.config");
 
 const app = express();
-var corsOptions = {
-  origin: "http://localhost:4200",
-};
 
 app.all('/', function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -39,7 +36,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use(cors(corsOptions));
+app.use(cors());
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
