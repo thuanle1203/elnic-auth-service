@@ -19,7 +19,9 @@ module.exports = function (app) {
     controller.adminBoard
   );
   
-  app.put("/api/updateUser", controller.updateUser);
+  app.put("/api/user/:id", controller.updateUser);
 
-  app.get("/api/getUser", controller.getUser);
+  app.delete("/api/user/:id", controller.deleteUsers);
+
+  app.get("/api/user", controller.getUser);
 };
