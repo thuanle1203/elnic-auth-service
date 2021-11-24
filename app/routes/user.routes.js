@@ -29,5 +29,4 @@ module.exports = function (app) {
   app.put("/api/user/:id", controller.updateUser);
 
   app.delete("/api/user/:id", controller.deleteUsers);
-
 };
