@@ -1,5 +1,6 @@
 const { authJwt } = require("../middlewares");
 const controller = require("../controllers/user.controller");
+const { verifySignUp } = require("../middlewares");
 
 module.exports = function (app) {
 
@@ -19,9 +20,13 @@ module.exports = function (app) {
     controller.adminBoard
   );
   
+  app.get("/api/user", controller.getUser);
+
+  app.post("/api/user/createUser", controller.createUser);
+
+  app.get("/api/user/getByIdOrUsername", controller.getByIdOrUsername);
+  
   app.put("/api/user/:id", controller.updateUser);
 
   app.delete("/api/user/:id", controller.deleteUsers);
-
-  app.get("/api/user", controller.getUser);
 };
