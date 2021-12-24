@@ -9,6 +9,7 @@ const User = mongoose.model(
     phone:String,
     fullName: String,
     email_verified: Boolean,
+    payment_type: String,
     last_seen: Date,
     roles: [
       {
