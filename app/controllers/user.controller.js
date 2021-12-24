@@ -18,10 +18,9 @@ exports.moderatorBoard = (req, res) => {
   res.status(200).send("Moderator Content.");
 };
 
-exports.createUser = async(req, res) => {
- 
+exports.createUser = async (req, res) => {
   User.findOne({
-    email: req.body.email
+    email: req.body.email,
   }).exec((err, user) => {
     if (err) {
       res.status(500).send({ message: err });
@@ -32,7 +31,6 @@ exports.createUser = async(req, res) => {
       res.status(200).send({ data: user });
       return;
     } else {
-      
       const user = new User({
         fullName: req.body.fullName,
         email: req.body.email,
@@ -91,9 +89,7 @@ exports.createUser = async(req, res) => {
 };
 
 exports.updateUser = (req, res) => {
-  User.findOneAndUpdate({ username: req.params.id }, req.body, {
-    useFindAndModify: false,
-  })
+  User.findOneAndUpdate({ _id: req.params.id }, req.body)
     .then((data) => {
       if (!data) {
         res.status(404).send({
@@ -115,27 +111,27 @@ exports.getUser = (req, res) => {
   const condition = [
     {
       $lookup: {
-        from: 'roles',
-        localField: 'roles',
-        foreignField: '_id',
-        as: 'roles'
-      }
-    }
+        from: "roles",
+        localField: "roles",
+        foreignField: "_id",
+        as: "roles",
+      },
+    },
   ];
 
-  User.aggregate(condition).then((data) => {
-    if (!data) {
-      res.status(404).send({
-        message: `Not have any user here`,
+  User.aggregate(condition)
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({
+          message: `Not have any user here`,
+        });
+      } else res.status(200).send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error get User",
       });
-    } else
-      res.status(200).send(data);
-  })
-  .catch((err) => {
-    res.status(500).send({
-      message: "Error get User",
     });
-  });
 };
 
 exports.deleteUsers = (req, res) => {
@@ -146,39 +142,38 @@ exports.deleteUsers = (req, res) => {
   }
 
   try {
-    User.deleteOne( { _id : req.params.id } ).then(() => {
+    User.deleteOne({ _id: req.params.id }).then(() => {
       res.status(200).send({
         message: "Delete successfuly.",
       });
     });
- } catch (e) {
-  res.status(500).send({
-    message: e.message || "Some error occurred while retrieving id.",
-  });
- }
+  } catch (e) {
+    res.status(500).send({
+      message: e.message || "Some error occurred while retrieving id.",
+    });
+  }
 };
 
 exports.getByIdOrUsername = (req, res) => {
-
   const id = req.query?.id;
 
   const username = req.query?.username;
 
   User.findOne({
-    $or: [ { _id: id }, { username: username } ],
-  }).then((data) => {
-    if (!data || !data.roles.includes('61841bea95875e379c155f64')) {
-      res.status(200).send({
-        message: `Not have any user here`,
-      });
-    } else
-      res.status(200).send(data);
+    $or: [{ _id: id }, { username: username }],
   })
-  .catch((err) => {
-    res.status(500).send({
-      message: "Error get User",
+    .then((data) => {
+      if (!data || !data.roles.includes("61841bea95875e379c155f64")) {
+        res.status(200).send({
+          message: `Not have any user here`,
+        });
+      } else res.status(200).send(data);
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: "Error get User",
+      });
     });
-  });
 };
 
 exports.deleteUsers = (req, res) => {
@@ -189,14 +184,14 @@ exports.deleteUsers = (req, res) => {
   }
 
   try {
-    User.deleteOne( { _id : req.params.id } ).then(() => {
+    User.deleteOne({ _id: req.params.id }).then(() => {
       res.status(200).send({
         message: "Delete successfuly.",
       });
     });
- } catch (e) {
-  res.status(500).send({
-    message: e.message || "Some error occurred while retrieving id.",
-  });
- }
+  } catch (e) {
+    res.status(500).send({
+      message: e.message || "Some error occurred while retrieving id.",
+    });
+  }
 };
